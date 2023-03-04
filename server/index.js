@@ -9,10 +9,22 @@ require('dotenv').config();
 
 const port = 3000;
 
-app.get('/', (req, res) => {
-    res.send('Hello, world!');
+//connect to mongoDB
+const { mongoDB } = require('./Utils/config'); //dotenv.config();
+const mongoose = require('mongoose');
+
+mongoose.connect(mongoDB ,(err, res) => {
+    if (err) {
+        console.log(err);
+        console.log(`MongoDB Connection Failed`);
+    } else {
+        console.log(`MongoDB Connected`);
+    }
 });
 
+const userRoute = require("./routes/user");
+
+app.use("/user", userRoute);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
