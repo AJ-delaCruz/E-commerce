@@ -5,6 +5,7 @@ import styled from "styled-components";
 import {Button} from "@mui/material";
 import axios from "axios";
 import {backendUrl} from "../../config";
+import {useNavigate} from "react-router-dom";
 
 function Signup() {
 
@@ -12,6 +13,7 @@ function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     //button to signuo
     const submitSignup = (e) => {
@@ -23,6 +25,8 @@ function Signup() {
         axios.post(`${backendUrl}/user/signup`, data)
             .then(res => {
                 console.log(res.data);
+                // Navigate to home page after signup
+                navigate('/home');
             })
             .catch(err => {
                 console.log(err);
@@ -48,7 +52,7 @@ function Signup() {
             {/*{ redirectVar}*/}
             <Wrapper>
                 <Title>CREATE AN ACCOUNT</Title>
-                <Form>
+                <Form onSubmit={submitSignup}>
 
                     {/*<Input placeholder="Name" onChange={(e) => {*/}
                     {/*    setName(e.target.value);*/}
@@ -72,9 +76,13 @@ function Signup() {
                         cursor: "pointer",
                         margin: "10px",
                     }}
-                            onClick={submitSignup}>
+                            type="submit">
+                        {/*onClick={submitSignup}>*/}
+
                         Register
                     </Button>
+
+                    {error && <div>{error}</div>}
                 </Form>
             </Wrapper>
         </Container>

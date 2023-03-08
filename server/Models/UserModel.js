@@ -7,6 +7,8 @@ const usersSchema = new Schema({
         // email: {type: String, required: true},
         username: {type: String, required: true},
         password: {type: String, required: true},
+        userType: { type: String, enum: ['customer', 'admin'], default: 'admin' }
+
     },
 
     {
@@ -14,6 +16,6 @@ const usersSchema = new Schema({
     });
 
 
-//model based on schema
-const UserModel = mongoose.model('user', usersSchema);
+//user model based on schema
+const UserModel = mongoose.model('User', usersSchema);
 module.exports = UserModel;

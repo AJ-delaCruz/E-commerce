@@ -2,12 +2,16 @@ import React, {useState} from "react";
 import styled from "styled-components";
 import {Button} from "@mui/material";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+
 import {backendUrl} from "../../config";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
 
     //button to login
@@ -18,15 +22,36 @@ const Login = () => {
         //make a post request with the user data
         axios.post(`${backendUrl}/user/login`, data)
             .then(res => {
-                console.log(data);
+                console.log("Response:", res);
+                console.log("Data:", res.data);
+
+
+                const {token} = res.data;
+                const decoded = jwt_decode(token);
+                console.log(decoded.username);
+
+                // Save in local storage
+                localStorage.setItem("token", token);
+                localStorage.setItem("user_id", decoded._id);
+                localStorage.setItem("username", decoded.username);
+                localStorage.setItem("userType", decoded.userType);
+
+
+
+                // Navigate to home page after successful login
+                navigate('/home');
 
             })
             .catch(err => {
                 console.log(err);
-                //set invalid message
-                // setError(err.response);
-                setError((err.response.data.message));
+                if (err.response && err.response.data) {
+                    //set invalid message
+                    setError(err.response.data.message);
+                } else {
+                    setError("An error occurred");
 
+                }
+                console.log(error);
             });
 
     }
@@ -36,7 +61,7 @@ const Login = () => {
         <Container>
             <Wrapper>
                 <Title>LOG IN</Title>
-                <Form>
+                <Form  onSubmit={submitLogin}>
                     <Input placeholder="username" type="text" onChange={(e) => {
                         setUsername(e.target.value);
                     }}/>
@@ -54,7 +79,9 @@ const Login = () => {
                         cursor: "pointer",
                         margin: "10px",
                     }}
-                            onClick={submitLogin}>
+                            type="submit"
+                            /* onClick={submitLogin}> */
+                        >
                         Log In
                     </Button>
 
