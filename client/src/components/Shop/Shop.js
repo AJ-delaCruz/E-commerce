@@ -3,7 +3,7 @@ import axios from 'axios';
 import {backendUrl} from "../../config";
 import jwt_decode from 'jwt-decode';
 
-export const Product = () =>  {
+const Shop = () =>  {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
@@ -62,3 +62,5 @@ export const Product = () =>  {
         </form>
     );
 }
+
+export default Shop;

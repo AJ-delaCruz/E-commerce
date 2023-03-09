@@ -1,4 +1,4 @@
-const {Cart} = require('./models');
+const Cart = require("../Models/CartModel");
 const Product = require("../Models/ProductModel");
 
 // adding products to cart

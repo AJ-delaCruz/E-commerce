@@ -1,5 +1,5 @@
-const {Order} = require('./models');
-const {Cart} = require('./models');
+const Order = require("../Models/OrderModel");
+const Cart = require("../Models/CartModel");
 
 
 // Place a new order based on user's cart

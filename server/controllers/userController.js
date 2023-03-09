@@ -88,7 +88,7 @@ const login = async (req, res) => {
 const find = async (req, res) => {
 
     // console.log("INSIDE USER FIND");
-    const userId = req.query.userId;
+    const userId = req.query.userId; //to find user
     // console.log(userId)
     try {
         const user = await User.findById(userId);
@@ -104,9 +104,50 @@ const find = async (req, res) => {
     }
 }
 
+//update profile
+const updateUser = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        // Check if a file was uploaded
+        if (req.file) {
+            // Update the user's profile picture
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { profilePicture: req.file.filename },
+                { new: true, runValidators: true }
+            );
+
+            if (!updatedUser) {
+                return res.status(404).send({ message: 'User not found' });
+            }
+
+            return res.status(200).json(updatedUser);
+        }
+
+        // Update only the specified fields in the user's profile
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            req.body,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+
+
 
 module.exports = {
     signup,
     login,
-    find
+    find,
+    updateUser,
 };
