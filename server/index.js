@@ -16,20 +16,42 @@ const port = 3000;
 const { mongoDB } = require('./Utils/config'); //dotenv.config();
 const mongoose = require('mongoose');
 
-mongoose.connect(mongoDB ,(err, res) => {
+
+
+// mongoose.connect(mongoDB ,(err, res) => {
+//     if (err) {
+//         console.log(err);
+//         console.log(`MongoDB Connection Failed`);
+//     } else {
+//         console.log(`MongoDB Connected`);
+//     }
+// });
+
+//Connection pooling to improve the performance and scalability
+// reuse connection to db
+const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    maxPoolSize: 10, // max connections in the pool
+};
+
+mongoose.connect(mongoDB, options, (err) => {
     if (err) {
         console.log(err);
-        console.log(`MongoDB Connection Failed`);
+        console.log('MongoDB Connection Failed');
     } else {
-        console.log(`MongoDB Connected`);
+        console.log('MongoDB Connected');
     }
 });
 
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
+const orderRoute = require("./routes/orders");
 
 app.use("/user", userRoute);
 app.use("/product", productRoute);
+app.use("/order", orderRoute);
+
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
