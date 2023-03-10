@@ -8,6 +8,13 @@ const productSchema = new Schema({
         description: {type: String, required: true},
         // image: {type: String, required: true},
         // category: {type: Schema.Types.ObjectId, ref: 'Category', required: true},
+        inStock: {type: Boolean, default: true},
+        reviews: [{
+            user: {type: Schema.Types.ObjectId, ref: 'User'},
+            rating: {type: Number, required: true},
+            comment: {type: String, required: true}
+        }],
+        rating: {type: Number, default: 0, max: 5}
 
 
     },
