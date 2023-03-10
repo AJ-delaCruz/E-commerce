@@ -89,7 +89,7 @@ const find = async (req, res) => {
 
     // console.log("INSIDE USER FIND");
     const userId = req.query.userId; //to find user
-    // console.log(userId)
+    console.log(userId);
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -106,7 +106,10 @@ const find = async (req, res) => {
 
 //update profile
 const updateUser = async (req, res) => {
-    const userId = req.user.id;
+    // const userId = req.user.id;
+    const userId = req.query.userId;
+    console.log(req.body);
+    const updateData = {... req.body};
 
     try {
         // Check if a file was uploaded
@@ -114,26 +117,30 @@ const updateUser = async (req, res) => {
             // Update the user's profile picture
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
-                { profilePicture: req.file.filename },
-                { new: true, runValidators: true }
+                {profilePicture: req.file.filename},
+                {new: true, runValidators: true}
             );
 
             if (!updatedUser) {
-                return res.status(404).send({ message: 'User not found' });
+                return res.status(404).send({message: 'User not found'});
             }
 
+            console.log("file uploaded")
             return res.status(200).json(updatedUser);
         }
 
         // Update only the specified fields in the user's profile
+        // const updatedUser = await User.findOneAndUpdate(
+        //     {_id: userId}, req.body, {new: true, runValidators: true}
+        // );
         const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            req.body,
-            { new: true, runValidators: true }
+            {_id: userId},
+            {$set: updateData},
+            {new: true, runValidators: true}
         );
 
         if (!updatedUser) {
-            return res.status(404).send({ message: 'User not found' });
+            return res.status(404).send({message: 'User not found'});
         }
 
         res.status(200).json(updatedUser);
@@ -141,8 +148,6 @@ const updateUser = async (req, res) => {
         res.status(500).json(err);
     }
 };
-
-
 
 
 module.exports = {

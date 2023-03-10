@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../Utils/upload");
 
 const {
     signup,
@@ -8,10 +9,11 @@ const {
     updateUser
 } = require("../controllers/userController");
 
+
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/find", find);
-router.put("/update", updateUser);
+router.put("/update", upload.single("profileImage"), updateUser);
 
 
 module.exports = router;

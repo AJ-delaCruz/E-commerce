@@ -9,6 +9,16 @@ app.use(cors({origin: process.env.frontendURL, credentials: true}));
 app.use(express.urlencoded({extended: true})); //parse incoming request bodies with URL-encoded data by the client
 app.use(express.json()); // parse request bodies that are in JSON format
 
+const path = require("path");
+// make "uploads" directory as a static directory so it can be accessed by client
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+const fs = require('fs');
+
+// create the uploads directory if it doesn't exist
+if (!fs.existsSync('./uploads')) {
+    fs.mkdirSync('./uploads');
+}
 
 const port = 3000;
 
@@ -17,7 +27,7 @@ const { mongoDB } = require('./Utils/config'); //dotenv.config();
 const mongoose = require('mongoose');
 
 
-
+//
 // mongoose.connect(mongoDB ,(err, res) => {
 //     if (err) {
 //         console.log(err);
