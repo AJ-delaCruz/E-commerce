@@ -1,10 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
-const {addProduct} = require("../controllers/productController");
 const {checkAuth} = require("../Utils/passport");
+const upload = require("../Utils/upload");
 
-router.post("/add", checkAuth, addProduct);
+const {
+    addProduct,
+    getProductDetails,
+    getProducts,
+    updateProduct,
+    removeProduct,
+
+} = require("../controllers/productController");
+
+router.post("/add", upload.single("productImage"), checkAuth, addProduct);
+router.get('/:id', getProductDetails);
+router.get('/getAll', getProducts);
+router.put("/update", upload.single("productImage"), updateProduct);
+router.delete('/remove', removeProduct);
 
 
 
