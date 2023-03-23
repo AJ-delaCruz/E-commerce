@@ -3,7 +3,8 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
 import {backendUrl} from "../config";
-import ProductList from "../components/Product/ProductList";
+import ProductList from "./ProductList";
+// import Products from "../components/Product/Products";
 
 const Home = () => {
     const [name, setName] = useState("");
