@@ -1,8 +1,10 @@
 const express = require('express');
-const router = express.Router;
+const router = express.Router();
 
-const addCategory = require('../controllers/categoryController');
+const {addCategory, getCategories} = require('../controllers/categoryController');
+const {checkAuth} = require("../Utils/passport");
 
-router.post('/add', addCategory);
+router.post('/add', checkAuth, addCategory);
+router.get('/get', getCategories);
 
 module.exports = router;

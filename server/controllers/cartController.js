@@ -5,6 +5,7 @@ const Product = require("../Models/ProductModel");
 const addProduct = async (req, res) => {
     const {userId, productId, quantity} = req.body;
 
+    console.log(req.user.userType);
 
     try {
         // look for an existing cart
@@ -83,7 +84,7 @@ const deleteProduct = async (req, res) => {
     }
 
 
-}
+};
 
 
 //change the quantity of the item
@@ -128,7 +129,7 @@ const updateCart = async (req, res) => {
     }
 
 
-}
+};
 
 const getCart = async (req, res) => {
     const userId = req.query.userId;
@@ -146,6 +147,6 @@ const getCart = async (req, res) => {
         res.status(500).json({message: "Error getting cart"});
     }
 
-}
+};
 
 module.exports = {addProduct, deleteProduct, updateCart, getCart}
