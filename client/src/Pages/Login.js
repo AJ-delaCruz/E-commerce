@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 
-import {backendUrl} from "../../config";
+import {backendUrl} from "../config";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -39,7 +39,7 @@ const Login = () => {
 
 
                 // Navigate to home page after successful login
-                navigate('/home');
+                navigate('/');
 
             })
             .catch(err => {

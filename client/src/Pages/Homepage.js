@@ -1,8 +1,9 @@
 import React from 'react';
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Navbar from "../Navbar/Navbar";
-import {backendUrl} from "../../config";
+import Navbar from "../components/Navbar/Navbar";
+import {backendUrl} from "../config";
+import ProductList from "../components/Product/ProductList";
 
 const Home = () => {
     const [name, setName] = useState("");
@@ -21,13 +22,13 @@ const Home = () => {
             }
         };
         findName();
-    },[userId]);
+    }, [userId]);
 
-    return(
-        <div >
+    return (
+        <div>
             <Navbar/>
-            { name && <h2 style={{ marginTop: "30px", marginLeft: "300px" }}>Welcome back, {name}</h2> }
-
+            {name && <h2 style={{marginTop: "30px", marginLeft: "300px"}}>Welcome back, {name}</h2>}
+            <ProductList/>
 
             {/*<Footer/>*/}
 

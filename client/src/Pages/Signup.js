@@ -4,7 +4,7 @@ import styled from "styled-components";
 // import {useHistory, Redirect} from "react-router-dom";
 import {Button} from "@mui/material";
 import axios from "axios";
-import {backendUrl} from "../../config";
+import {backendUrl} from "../config";
 import {useNavigate} from "react-router-dom";
 
 function Signup() {
