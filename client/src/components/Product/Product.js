@@ -9,37 +9,66 @@ import Favorite from "@mui/icons-material/Favorite";
 import {backendUrl} from "../../config";
 
 const Product = ({item}) => {
-    const [fav, setFav] = useState({});
     const userId = localStorage.getItem("user_id");
+    const [checked, setChecked] = useState(false);
 
-    // const handleClick = () => {
-    //     // const dat = {username: "jay"};
-    //     axios.post(`${backendUrl}/favorites/${item._id}`, userId)
-    //         .then((res) => {
-    //             console.log(res.data)
-    //         }).catch((error) => {
-    //         console.log(error)
-    //     });
-    //
-    //     console.log("ADD FAVORITES");
-    //
-    //
-    // };
+    const handleClick = async (e) => {
+        e.preventDefault();
+        // const dat = {username: "jay"};
+
+        // Check if the product is already a favorite
+        try {
+            // Check if the product is already a favorite
+            const res = await axios.get(`${backendUrl}/favorite/${item._id}/${userId}`);
+            const isFavorite = res.data.isFavorite;
+            console.log(isFavorite);
+
+            if (isFavorite) {
+                // Remove the favorite
+                await axios.delete(`${backendUrl}/favorite/${item._id}/${userId}`);
+                setChecked(false);
+                console.log("REMOVE FAVORITE");
+            } else {
+                // Add the favorite
+                await axios.post(`${backendUrl}/favorite`, { userId, productId: item._id });
+                setChecked(true);
+                console.log("ADD FAVORITE");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+
+    };
+    useEffect(() => {
+        // Check if the product is already in the user's favorites list
+        axios.get(`${backendUrl}/favorite/${item._id}/${userId}`)
+            .then((res) => {
+                setChecked(res.data.isFavorite);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [item._id, userId]);
 
     return (
         <div>
-            <ProductContainer key={item.id}>
-                <Link to={`/product/${item._id}`}/>
-                <ProductImage src={`${backendUrl}/${item.image}`}/>
-                <ProductInfo>
-                    <HeartIcon>
-                        <Checkbox
-                            icon={<FavoriteBorder/>}
-                            checkedIcon={<Favorite style={{color: "red"}}/>}
-                        />
-                    </HeartIcon>
-                </ProductInfo>
-            </ProductContainer>
+            <Link to={`/product/${item._id}`}>
+                <ProductContainer key={item.id}>
+
+                    <ProductImage src={`${backendUrl}/${item.image}`}/>
+
+                    <ProductInfo>
+                        <HeartIcon onClick={handleClick}>
+                            <Checkbox
+                                icon={<FavoriteBorder/>}
+                                checkedIcon={<Favorite style={{color: "red"}}/>}
+                                checked={checked}
+                            />
+                        </HeartIcon>
+                    </ProductInfo>
+                </ProductContainer>
+            </Link>
             {/*// </Link>*/}
         </div>
     );
@@ -63,7 +92,6 @@ const HeartIcon = styled.div`
     transform: scale(1.1);
   }
 `;
-
 
 const ProductInfo = styled.div`
   width: 100%;
@@ -89,7 +117,7 @@ const ProductContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f5fbfd;
+  background-color: rgba(189, 189, 189, 0.22);
   position: relative;
 
   &:hover ${ProductInfo} {
